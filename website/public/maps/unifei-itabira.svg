@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" role="group" aria-label="Mapa do campus UNIFEI Itabira">
+  <defs>
+    <pattern id="atlas-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0v30" fill="none" stroke="var(--map-grid)" stroke-width="1"/>
+    </pattern>
+    <!-- Vagas: uma linha por vaga, repetida pelo padrão em vez de 18 traços. -->
+    <pattern id="atlas-vagas" width="26" height="70" patternUnits="userSpaceOnUse">
+      <path d="M0 6v58" stroke="var(--map-wall)" stroke-width="1.5" opacity=".55"/>
+    </pattern>
+    <g id="atlas-arvore">
+      <circle r="17" fill="var(--map-detail)"/>
+      <circle r="17" fill="none" stroke="var(--map-wall)" stroke-width="1.5" opacity=".6"/>
+      <circle cx="-5" cy="-5" r="7" fill="var(--map-wall)" opacity=".3"/>
+    </g>
+  </defs>
+
+  <rect width="900" height="660" fill="var(--map-terrain)"/>
+  <rect width="900" height="660" fill="url(#atlas-grid)"/>
+
+  <!-- limite do terreno -->
+  <rect x="18" y="26" width="864" height="552" fill="none" stroke="var(--map-wall)"
+        stroke-width="2" stroke-dasharray="16 10" opacity=".6"/>
+
+  <!-- avenida, acesso, praça, estacionamento e quadra -->
+  <g fill="var(--map-paving)">
+    <rect y="590" width="900" height="62"/>
+    <rect x="442" y="288" width="36" height="302"/>
+    <rect x="478" y="412" width="152" height="32"/>
+    <rect x="630" y="330" width="232" height="150"/>
+    <rect x="628" y="498" width="234" height="80"/>
+    <circle cx="460" cy="300" r="72"/>
+  </g>
+  <rect x="630" y="330" width="232" height="70" fill="url(#atlas-vagas)"/>
+  <rect x="630" y="410" width="232" height="70" fill="url(#atlas-vagas)"/>
+
+  <!-- calçadas ligando a praça aos prédios -->
+  <g fill="none" stroke="var(--map-paving)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M460 230v-60h-56"/>
+    <path d="M390 300H228v38"/>
+    <path d="M530 300h148v-48"/>
+  </g>
+
+  <!-- marcações de piso: faixa da avenida, canteiro da praça, linhas da quadra -->
+  <g fill="none" stroke="var(--map-wall)" opacity=".6">
+    <path d="M0 621h900" stroke-width="3" stroke-dasharray="28 22"/>
+    <circle cx="460" cy="300" r="34" stroke-width="1.5"/>
+    <rect x="640" y="508" width="210" height="60" stroke-width="1.5"/>
+    <path d="M745 508v60" stroke-width="1.5"/>
+    <circle cx="745" cy="538" r="15" stroke-width="1.5"/>
+  </g>
+
+  <g>
+    <use href="#atlas-arvore" x="460" y="300"/>
+    <use href="#atlas-arvore" x="62" y="70"/>
+    <use href="#atlas-arvore" x="58" y="116"/>
+    <use href="#atlas-arvore" x="96" y="92"/>
+    <use href="#atlas-arvore" x="60" y="300"/>
+    <use href="#atlas-arvore" x="66" y="360"/>
+    <use href="#atlas-arvore" x="462" y="108"/>
+    <use href="#atlas-arvore" x="472" y="158"/>
+    <use href="#atlas-arvore" x="838" y="296"/>
+    <use href="#atlas-arvore" x="72" y="500"/>
+    <use href="#atlas-arvore" x="110" y="530"/>
+    <use href="#atlas-arvore" x="258" y="540"/>
+    <use href="#atlas-arvore" x="300" y="498"/>
+    <use href="#atlas-arvore" x="346" y="526"/>
+    <use href="#atlas-arvore" x="560" y="516"/>
+    <use href="#atlas-arvore" x="606" y="546"/>
+  </g>
+
+  <!-- Sombra fora do grupo clicável: dentro dele receberia a cor do status. -->
+  <g fill="var(--bg)" opacity=".5">
+    <rect x="106" y="88" width="300" height="180" rx="2"/>
+    <rect x="536" y="88" width="290" height="170" rx="2"/>
+    <rect x="126" y="344" width="210" height="124" rx="2"/>
+  </g>
+
+  <!-- Prédios clicáveis: id igual ao ID do prédio em /structure. -->
+  <g id="bld-1" class="atlas-building">
+    <rect x="100" y="80" width="300" height="180" rx="2"
+          fill="var(--map-inactive)" stroke="var(--map-wall)" stroke-width="1.5"/>
+  </g>
+  <g id="bld-2" class="atlas-building">
+    <rect x="530" y="80" width="290" height="170" rx="2"
+          fill="var(--map-inactive)" stroke="var(--map-wall)" stroke-width="1.5"/>
+  </g>
+  <!-- Prédio desenhado, mas ainda sem ambientes na API: fica neutro. -->
+  <g id="bld-3" class="atlas-building">
+    <rect x="120" y="336" width="210" height="124" rx="2"
+          fill="var(--map-inactive)" stroke="var(--map-wall)" stroke-width="1.5"/>
+  </g>
+
+  <!-- cobertura: platibanda e cumeeira, por cima e sem captar ponteiro -->
+  <g pointer-events="none" fill="none" stroke="var(--map-wall)" stroke-width="1.2" opacity=".5">
+    <rect x="110" y="90" width="280" height="160"/>
+    <path d="M250 90v160"/>
+    <rect x="540" y="90" width="270" height="150"/>
+    <path d="M675 90v150"/>
+    <rect x="130" y="346" width="190" height="104"/>
+    <path d="M225 346v104"/>
+  </g>
+
+  <g pointer-events="none" transform="translate(846 60)">
+    <path d="M0-16 7 8 0 3-7 8Z" fill="var(--text-muted)"/>
+    <text y="26" text-anchor="middle" font-size="13" font-weight="600" fill="var(--text-muted)">N</text>
+  </g>
+
+  <g class="map-minor" pointer-events="none" transform="translate(40 558)">
+    <rect width="58" height="7" fill="var(--map-wall)"/>
+    <rect x="58" width="58" height="7" fill="none" stroke="var(--map-wall)" stroke-width="1"/>
+    <g font-size="12" fill="var(--text-muted)" text-anchor="middle">
+      <text x="0" y="-7">0</text>
+      <text x="58" y="-7">25</text>
+      <text x="116" y="-7">50 m</text>
+    </g>
+  </g>
+
+  <g pointer-events="none" text-anchor="middle" font-weight="600" fill="var(--text)">
+    <text x="250" y="178" font-size="26">Prédio 1</text>
+    <text x="675" y="172" font-size="26">Prédio 2</text>
+    <text x="225" y="398" font-size="22">Prédio 3</text>
+    <text x="225" y="420" font-size="13" font-weight="500" fill="var(--text-muted)">sem ambientes</text>
+  </g>
+
+  <g class="map-minor" pointer-events="none" text-anchor="middle"
+     font-size="13" font-weight="500" fill="var(--text-muted)">
+    <text x="746" y="409">Estacionamento</text>
+    <text x="745" y="492">Quadra</text>
+    <text x="460" y="356">Praça</text>
+    <text x="450" y="638">Av. Principal</text>
+  </g>
+</svg>

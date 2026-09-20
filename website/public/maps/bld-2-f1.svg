@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="group" aria-label="Planta do 1º andar do Prédio 2">
+  <defs>
+    <pattern id="atlas-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0v30" fill="none" stroke="var(--map-grid)" stroke-width="1"/>
+    </pattern>
+    <pattern id="atlas-degraus" width="12" height="15" patternUnits="userSpaceOnUse">
+      <path d="M0 0h12" stroke="var(--map-detail)" stroke-width="1.5"/>
+    </pattern>
+    <g id="atlas-mesa" fill="var(--map-detail)">
+      <circle r="18"/>
+      <circle cx="-28" r="7"/><circle cx="28" r="7"/>
+      <circle cy="-28" r="7"/><circle cy="28" r="7"/>
+    </g>
+  </defs>
+
+  <rect width="900" height="560" fill="var(--map-terrain)"/>
+  <rect width="900" height="560" fill="url(#atlas-grid)"/>
+
+  <rect x="52" y="52" width="796" height="456" fill="var(--map-inactive)" opacity=".45"/>
+  <rect x="52" y="282" width="796" height="68" fill="var(--map-paving)"/>
+  <rect x="312" y="362" width="536" height="146" fill="var(--map-inactive)" opacity=".5"/>
+
+  <!-- Ambientes clicáveis: id igual ao ID do space em /structure. -->
+  <g id="room-201" class="atlas-space">
+    <rect x="52" y="52" width="418" height="218"
+          fill="var(--map-inactive)" stroke="var(--map-stroke)" stroke-width="1"/>
+  </g>
+  <g id="room-203" class="atlas-space">
+    <rect x="482" y="52" width="366" height="218"
+          fill="var(--map-inactive)" stroke="var(--map-stroke)" stroke-width="1"/>
+  </g>
+  <g id="room-202" class="atlas-space">
+    <rect x="52" y="362" width="248" height="146"
+          fill="var(--map-inactive)" stroke="var(--map-stroke)" stroke-width="1"/>
+  </g>
+
+  <!-- Paredes: desenhadas com os vãos já abertos, em vez de recortadas depois. -->
+  <g fill="var(--map-wall)">
+    <rect x="40" y="40" width="820" height="12"/>
+    <rect x="40" y="508" width="820" height="12"/>
+    <rect x="40" y="52" width="12" height="238"/>
+    <rect x="40" y="346" width="12" height="162"/>
+    <rect x="848" y="52" width="12" height="456"/>
+    <rect x="470" y="52" width="12" height="218"/>
+    <rect x="300" y="362" width="12" height="146"/>
+    <rect x="560" y="362" width="12" height="146"/>
+    <rect x="706" y="362" width="12" height="146"/>
+    <rect x="52" y="270" width="348" height="12"/>
+    <rect x="460" y="270" width="300" height="12"/>
+    <rect x="820" y="270" width="28" height="12"/>
+    <rect x="52" y="350" width="88" height="12"/>
+    <rect x="188" y="350" width="212" height="12"/>
+    <rect x="448" y="350" width="232" height="12"/>
+    <rect x="740" y="350" width="108" height="12"/>
+  </g>
+
+  <!-- esquadrias: o vão aberto na parede mais a linha do caixilho -->
+  <g fill="var(--map-terrain)">
+    <rect x="110" y="40" width="150" height="12"/>
+    <rect x="300" y="40" width="140" height="12"/>
+    <rect x="40" y="90" width="12" height="140"/>
+    <rect x="40" y="400" width="12" height="70"/>
+    <rect x="848" y="400" width="12" height="70"/>
+    <rect x="100" y="508" width="150" height="12"/>
+    <rect x="360" y="508" width="150" height="12"/>
+  </g>
+  <g stroke="var(--map-wall)" stroke-width="2" fill="none">
+    <path d="M110 46h150M300 46h140M100 514h150M360 514h150"/>
+    <path d="M46 90v140M46 400v70M854 400v70"/>
+  </g>
+
+  <!-- portas: folha no traço forte, arco de giro no traço fraco -->
+  <g fill="none" stroke="var(--map-wall)" stroke-width="1.8" stroke-linecap="round">
+    <path d="M460 270v-60M820 270v-60M140 362v48M448 362v48M680 362v60M52 290h28M52 346h28"/>
+    <g opacity=".45">
+      <path d="M400 270A60 60 0 0 1 460 210"/>
+      <path d="M760 270A60 60 0 0 1 820 210"/>
+      <path d="M188 362A48 48 0 0 1 140 410"/>
+      <path d="M400 362A48 48 0 0 0 448 410"/>
+      <path d="M740 362A60 60 0 0 1 680 422"/>
+      <path d="M52 318A28 28 0 0 0 80 290"/>
+      <path d="M52 318A28 28 0 0 1 80 346"/>
+    </g>
+  </g>
+
+  <!-- Restaurante: balcão encostado na fachada e mesas redondas de quatro lugares. -->
+  <path d="M78 90v150" fill="none" stroke="var(--map-detail)" stroke-width="24"/>
+  <g>
+    <use href="#atlas-mesa" x="140" y="140"/>
+    <use href="#atlas-mesa" x="216" y="140"/>
+    <use href="#atlas-mesa" x="292" y="140"/>
+    <use href="#atlas-mesa" x="368" y="140"/>
+    <use href="#atlas-mesa" x="140" y="214"/>
+    <use href="#atlas-mesa" x="216" y="214"/>
+    <use href="#atlas-mesa" x="292" y="214"/>
+    <use href="#atlas-mesa" x="368" y="214"/>
+  </g>
+
+  <!-- Auditório: palco e fileiras curvas; cada traço da linha tracejada é uma poltrona. -->
+  <rect x="524" y="68" width="282" height="40" fill="var(--map-detail)"/>
+  <g fill="none" stroke="var(--map-detail)" stroke-width="12"
+     stroke-dasharray="18 9" stroke-linecap="round">
+    <path d="M524 158Q632 144 740 158"/>
+    <path d="M524 184Q632 170 740 184"/>
+    <path d="M524 210Q632 196 740 210"/>
+    <path d="M524 236Q632 222 740 236"/>
+    <path d="M524 258Q632 244 740 258"/>
+  </g>
+
+  <!-- Sala 202: carteiras voltadas para o quadro na parede do fundo. -->
+  <g fill="none" stroke="var(--map-detail)">
+    <path d="M104 404h140" stroke-width="11" stroke-dasharray="0 70" stroke-linecap="round"/>
+    <path d="M76 424h196" stroke-width="22" stroke-dasharray="56 14"/>
+    <path d="M104 452h140" stroke-width="11" stroke-dasharray="0 70" stroke-linecap="round"/>
+    <path d="M76 472h196" stroke-width="22" stroke-dasharray="56 14"/>
+  </g>
+  <path d="M88 498h176" fill="none" stroke="var(--map-wall)" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- cozinha, escada e sanitários -->
+  <path d="M330 384h214" fill="none" stroke="var(--map-detail)" stroke-width="22"/>
+  <g fill="none" stroke="var(--map-detail)" stroke-width="1.5">
+    <rect x="396" y="420" width="80" height="40" rx="3"/>
+    <circle cx="416" cy="432" r="6"/>
+    <circle cx="456" cy="432" r="6"/>
+    <circle cx="416" cy="448" r="6"/>
+    <circle cx="456" cy="448" r="6"/>
+    <rect x="732" y="384" width="28" height="32" rx="3"/>
+    <rect x="732" y="424" width="28" height="32" rx="3"/>
+    <rect x="732" y="464" width="28" height="32" rx="3"/>
+    <circle cx="802" cy="398" r="10"/>
+    <circle cx="802" cy="430" r="10"/>
+  </g>
+  <rect x="614" y="392" width="90" height="100" fill="url(#atlas-degraus)"
+        stroke="var(--map-detail)" stroke-width="1.5"/>
+  <path d="M659 484v-78m0 0-8 12m8-12 8 12" fill="none" stroke="var(--map-wall)"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g class="map-minor" pointer-events="none" transform="translate(52 538)">
+    <rect width="60" height="6" fill="var(--map-wall)"/>
+    <rect x="60" width="60" height="6" fill="none" stroke="var(--map-wall)" stroke-width="1"/>
+    <g font-size="12" fill="var(--text-muted)" text-anchor="middle">
+      <text x="0" y="-6">0</text>
+      <text x="60" y="-6">5</text>
+      <text x="120" y="-6">10 m</text>
+    </g>
+  </g>
+
+  <!-- Rótulos fora dos grupos clicáveis; o contorno de leitura vem do globals.css. -->
+  <g pointer-events="none" fill="var(--text)" font-weight="600" text-anchor="middle">
+    <text x="290" y="80" font-size="21">Restaurante Universitário</text>
+    <text x="665" y="138" font-size="22">Auditório</text>
+    <text x="176" y="382" font-size="20">Sala 202</text>
+  </g>
+  <g pointer-events="none" fill="var(--text-muted)" font-size="14" font-weight="600">
+    <text x="64" y="72">201</text>
+    <text x="494" y="72">203</text>
+    <text x="64" y="382">202</text>
+  </g>
+  <g class="map-minor" pointer-events="none" fill="var(--text-muted)"
+     font-size="13" font-weight="500" text-anchor="middle">
+    <text x="665" y="93">Palco</text>
+    <text x="110" y="300">Entrada</text>
+    <text x="470" y="322">Circulação</text>
+    <text x="436" y="486">Cozinha</text>
+    <text x="659" y="378">Escada</text>
+    <text x="783" y="378">Sanitários</text>
+  </g>
+</svg>

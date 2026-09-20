@@ -1,0 +1,236 @@
+@import "tailwindcss";
+
+:root {
+  /* superfícies */
+  --bg:            #05070A;  /* fundo da página (preto do logo) */
+  --surface:       #0E141B;  /* cartões, painel de detalhe */
+  --surface-2:     #151E29;  /* linha de tabela em hover, cabeçalho */
+  --border:        #22303F;
+
+  /* texto */
+  --text:          #F2F5F8;
+  --text-muted:    #93A1B0;
+
+  /* marca */
+  --brand:         #1E90FF;  /* azul do logo: links, botões, seleção, foco */
+  --brand-strong:  #0A66FF;  /* hover/pressionado */
+  --brand-soft:    #4FB0FF;  /* realce, brilho, borda do ambiente selecionado */
+
+  /* status de ocupação */
+  --status-empty:  #22D3EE;
+  --status-normal: #22C55E;
+  --status-high:   #F5A524;
+  --status-over:   #F04438;
+  --status-nodata: #64748B;
+
+  /* mapa — daqui para baixo os tokens só aparecem dentro dos SVGs, que são
+     carregados inline e por isso herdam estas variáveis. */
+  --map-stroke:    #22303F;  /* contorno de paredes e ambientes */
+  --map-inactive:  #1A2431;  /* elemento do SVG sem ambiente correspondente */
+  --map-selected:  #4FB0FF;  /* contorno do ambiente selecionado */
+  --map-terrain:   #101922;  /* terreno do campus e laje do pavimento */
+  --map-paving:    #1B2734;  /* vias, praça, corredor */
+  --map-wall:      #33465B;  /* parede: o traço mais forte do desenho */
+  --map-detail:    #263646;  /* mobiliário, árvores, marcações de piso */
+  --map-grid:      #131D27;  /* malha de fundo, quase imperceptível */
+
+  /* movimento: curvas fortes, porque as nativas do CSS são fracas demais
+     para leitura em telas densas de dado. */
+  --ease-out:      cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer:   cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-press:     120ms;
+  --dur-base:      180ms;
+  --dur-panel:     260ms;
+
+  /* altura da barra inferior no mobile, usada para afastar o conteúdo */
+  --bottom-nav-h:  4rem;
+}
+
+/* Expõe os tokens como utilitários do Tailwind (bg-surface, text-muted, ...),
+   para que nenhum componente precise escrever um hex. */
+@theme inline {
+  --color-bg:           var(--bg);
+  --color-surface:      var(--surface);
+  --color-surface-2:    var(--surface-2);
+  --color-border:       var(--border);
+  --color-text:         var(--text);
+  --color-muted:        var(--text-muted);
+  --color-brand:        var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft:   var(--brand-soft);
+  --color-empty:        var(--status-empty);
+  --color-normal:       var(--status-normal);
+  --color-high:         var(--status-high);
+  --color-over:         var(--status-over);
+  --color-nodata:       var(--status-nodata);
+  --color-map-stroke:   var(--map-stroke);
+  --color-map-inactive: var(--map-inactive);
+  --color-map-selected: var(--map-selected);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  color-scheme: dark;
+  /* Reserva a calha da barra de rolagem: travar o scroll com o painel aberto
+     deixa de empurrar o layout. */
+  scrollbar-gutter: stable;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* O realce azul do toque some; quem dá o retorno é o :active de cada peça. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Sem espera de 300 ms no toque. */
+a,
+button,
+input,
+select,
+summary,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* Foco visível e consistente: sempre no azul da marca. */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Tabular para números de ocupação, evitando o texto "pular" a cada polling. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Barra de ocupação: cresce até a largura nova em vez de saltar a cada ciclo
+   de polling. */
+.bar-fill {
+  transition: width var(--dur-panel) var(--ease-out);
+}
+
+/* Retorno de toque: o alvo encolhe de leve enquanto o dedo está nele. */
+.press {
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.press:active {
+  transform: scale(0.985);
+}
+
+/* Pula direto para o conteúdo; só aparece ao receber foco pelo teclado. */
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 0.375rem;
+  background: var(--brand);
+  padding: 0.5rem 0.875rem;
+  color: var(--bg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+@keyframes atlas-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Mobile: o painel sobe da borda inferior, de onde o polegar o chamou. */
+@keyframes atlas-sheet-rise {
+  from { opacity: 0; transform: translateY(14%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Desktop: o painel desliza da direita, de onde ele mora. */
+@keyframes atlas-drawer-slide {
+  from { opacity: 0; transform: translateX(1.5rem); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.anim-overlay {
+  animation: atlas-fade-in var(--dur-panel) var(--ease-out);
+}
+
+.anim-panel {
+  animation: atlas-sheet-rise var(--dur-panel) var(--ease-drawer);
+}
+
+@media (min-width: 640px) {
+  .anim-panel {
+    animation-name: atlas-drawer-slide;
+    animation-timing-function: var(--ease-out);
+  }
+}
+
+/* Quem pediu menos movimento continua vendo a transição — só sem deslocamento. */
+@media (prefers-reduced-motion: reduce) {
+  .anim-panel {
+    animation-name: atlas-fade-in;
+  }
+
+  .press:active {
+    transform: none;
+  }
+
+  .bar-fill {
+    transition: none;
+  }
+
+  .skip-link {
+    transition: none;
+  }
+}
+
+/* O desenho manda na altura: a planta ocupa o que precisa, sem faixa vazia em
+   volta quando a tela é estreita e o traçado é largo. */
+.map-surface {
+  min-height: 12rem;
+}
+
+.map-surface svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: clamp(16rem, 56vh, 40rem);
+  margin-inline: auto;
+}
+
+/* Rótulo de mapa leva contorno na cor da superfície: o texto passa por cima do
+   ambiente pintado, e sobre um status claro (laranja, ciano) ele sumiria. */
+.map-surface svg text {
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 0.22em;
+  stroke-linejoin: round;
+}
+
+/* Anotação secundária do desenho (corredor, escada, escala). No celular a
+   planta cai para ~280 px e esse texto vira sujeira ilegível. */
+@media (max-width: 639px) {
+  .map-surface svg .map-minor {
+    display: none;
+  }
+}
+
+/* Conteúdo das telas: no mobile precisa passar por cima da barra inferior. */
+.page-main {
+  padding-bottom: calc(var(--bottom-nav-h) + 1.5rem + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  .page-main {
+    padding-bottom: 2rem;
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "room-102",
+  "name": "Sala 102",
+  "code": "102",
+  "type": "classroom",
+  "building": { "id": "bld-1", "name": "Prédio 1" },
+  "floor": { "id": "bld-1-f2", "name": "2º andar", "level": 2 },
+  "capacity": 40,
+  "operational_limit": 35,
+  "person_count": 36,
+  "occupancy_rate": 0.9,
+  "status": "over_limit",
+  "captured_at": "2026-09-20T17:30:10Z",
+  "source": {
+    "camera_id": "CAM-01",
+    "camera_name": "Câmera 1",
+    "region_id": "ROI-02",
+    "online": true,
+    "last_seen_at": "2026-09-20T17:30:12Z"
+  }
+}

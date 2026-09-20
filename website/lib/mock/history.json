@@ -1,0 +1,12 @@
+{
+  "space_id": "room-102",
+  "points": [
+    { "captured_at": "2026-09-20T17:29:00Z", "person_count": 30, "occupancy_rate": 0.75 },
+    { "captured_at": "2026-09-20T17:29:05Z", "person_count": 31, "occupancy_rate": 0.775 },
+    { "captured_at": "2026-09-20T17:29:10Z", "person_count": 33, "occupancy_rate": 0.825 },
+    { "captured_at": "2026-09-20T17:29:15Z", "person_count": 34, "occupancy_rate": 0.85 },
+    { "captured_at": "2026-09-20T17:29:20Z", "person_count": 34, "occupancy_rate": 0.85 },
+    { "captured_at": "2026-09-20T17:29:25Z", "person_count": 35, "occupancy_rate": 0.875 },
+    { "captured_at": "2026-09-20T17:29:30Z", "person_count": 36, "occupancy_rate": 0.9 }
+  ]
+}

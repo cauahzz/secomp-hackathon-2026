@@ -1,0 +1,22 @@
+{
+  "CAM-01": {
+    "name": "Câmera 1",
+    "online": true,
+    "regions": { "room-101": "ROI-01", "room-102": "ROI-02" }
+  },
+  "CAM-02": {
+    "name": "Câmera 2",
+    "online": true,
+    "regions": { "room-103": "ROI-03", "room-001": "ROI-04", "room-002": "ROI-05" }
+  },
+  "CAM-03": {
+    "name": "Câmera 3",
+    "online": true,
+    "regions": { "room-003": "ROI-06", "room-201": "ROI-07", "room-203": "ROI-08" }
+  },
+  "CAM-04": {
+    "name": "Câmera 4",
+    "online": false,
+    "regions": { "room-202": "ROI-09" }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "campus": {"id": "unifei-itabira", "name": "UNIFEI — Campus Itabira", "code": "ITA"},
+  "buildings": [{
+    "id": "bld-1", "name": "Prédio 1", "code": "P1", "floors": [{
+      "id": "bld-1-f2", "name": "2º andar", "level": 2, "spaces": [
+        {"id": "room-101", "name": "Sala 101", "code": "101", "type": "classroom", "capacity": 40, "operational_limit": 35},
+        {"id": "room-102", "name": "Sala 102", "code": "102", "type": "classroom", "capacity": 40, "operational_limit": 35}
+      ]
+    }]
+  }],
+  "cameras": [{
+    "id": "CAM-01", "name": "Câmera 1", "source_type": "file", "source_uri": "data/demo.mp4",
+    "width": 1280, "height": 720, "fps": 30, "enabled": true,
+    "regions": [
+      {"id": "ROI-01", "space_id": "room-101", "name": "Sala 101", "type": "occupancy", "shape": "rectangle", "geometry": {"x": 0, "y": 0, "width": 640, "height": 720}, "enabled": true},
+      {"id": "ROI-02", "space_id": "room-102", "name": "Sala 102", "type": "occupancy", "shape": "rectangle", "geometry": {"x": 640, "y": 0, "width": 640, "height": 720}, "enabled": true}
+    ]
+  }]
+}

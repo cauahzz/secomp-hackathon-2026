@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atlas-vision-agent"
+version = "1.0.0"
+description = "ATLAS computer vision agent"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26",
+  "opencv-python>=4.10",
+  "requests>=2.32",
+  "ultralytics>=8.3",
+]
+
+[project.scripts]
+atlas-vision = "atlas_vision.app:main"
+atlas-evaluate = "evaluate:main"
+
+# Layout plano: a autodescoberta para no pacote atlas_vision e deixaria
+# evaluate.py e run.py de fora, quebrando o console script atlas-evaluate.
+[tool.setuptools]
+packages = ["atlas_vision"]
+py-modules = ["evaluate", "run"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

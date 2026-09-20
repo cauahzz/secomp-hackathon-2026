@@ -1,0 +1,5 @@
+frame,region_id,manual_count
+frame_000.jpg,ROI-01,4
+frame_000.jpg,ROI-02,2
+frame_001.jpg,ROI-01,5
+frame_001.jpg,ROI-02,3

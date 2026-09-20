@@ -1,0 +1,49 @@
+{
+  "campus": { "id": "unifei-itabira", "name": "UNIFEI — Campus Itabira" },
+  "buildings": [
+    {
+      "id": "bld-1",
+      "name": "Prédio 1",
+      "code": "P1",
+      "floors": [
+        {
+          "id": "bld-1-f1",
+          "name": "1º andar",
+          "level": 1,
+          "spaces": [
+            { "id": "room-001", "name": "Laboratório 1", "code": "001", "type": "lab" },
+            { "id": "room-002", "name": "Laboratório 2", "code": "002", "type": "lab" },
+            { "id": "room-003", "name": "Biblioteca", "code": "003", "type": "library" }
+          ]
+        },
+        {
+          "id": "bld-1-f2",
+          "name": "2º andar",
+          "level": 2,
+          "spaces": [
+            { "id": "room-101", "name": "Sala 101", "code": "101", "type": "classroom" },
+            { "id": "room-102", "name": "Sala 102", "code": "102", "type": "classroom" },
+            { "id": "room-103", "name": "Sala 103", "code": "103", "type": "classroom" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bld-2",
+      "name": "Prédio 2",
+      "code": "P2",
+      "floors": [
+        {
+          "id": "bld-2-f1",
+          "name": "1º andar",
+          "level": 1,
+          "spaces": [
+            { "id": "room-201", "name": "Restaurante Universitário", "code": "201", "type": "cafeteria" },
+            { "id": "room-202", "name": "Sala 202", "code": "202", "type": "classroom" },
+            { "id": "room-203", "name": "Auditório", "code": "203", "type": "auditorium" }
+          ]
+        }
+      ]
+    }
+  ]
+}

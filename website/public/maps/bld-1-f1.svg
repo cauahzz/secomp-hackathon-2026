@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="group" aria-label="Planta do 1º andar do Prédio 1">
+  <defs>
+    <pattern id="atlas-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0v30" fill="none" stroke="var(--map-grid)" stroke-width="1"/>
+    </pattern>
+    <pattern id="atlas-degraus" width="12" height="15" patternUnits="userSpaceOnUse">
+      <path d="M0 0h12" stroke="var(--map-detail)" stroke-width="1.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="900" height="560" fill="var(--map-terrain)"/>
+  <rect width="900" height="560" fill="url(#atlas-grid)"/>
+
+  <!-- laje, circulação e áreas sem ambiente correspondente -->
+  <rect x="52" y="52" width="796" height="456" fill="var(--map-inactive)" opacity=".45"/>
+  <rect x="52" y="242" width="796" height="68" fill="var(--map-paving)"/>
+  <rect x="712" y="52" width="136" height="178" fill="var(--map-inactive)" opacity=".5"/>
+  <rect x="652" y="322" width="196" height="186" fill="var(--map-inactive)" opacity=".5"/>
+
+  <!-- Ambientes clicáveis: id igual ao ID do space em /structure. -->
+  <g id="room-001" class="atlas-space">
+    <rect x="52" y="52" width="374" height="178"
+          fill="var(--map-inactive)" stroke="var(--map-stroke)" stroke-width="1"/>
+  </g>
+  <g id="room-002" class="atlas-space">
+    <rect x="438" y="52" width="262" height="178"
+          fill="var(--map-inactive)" stroke="var(--map-stroke)" stroke-width="1"/>
+  </g>
+  <g id="room-003" class="atlas-space">
+    <rect x="52" y="322" width="588" height="186"
+          fill="var(--map-inactive)" stroke="var(--map-stroke)" stroke-width="1"/>
+  </g>
+
+  <!-- Paredes: desenhadas com os vãos já abertos, em vez de recortadas depois. -->
+  <g fill="var(--map-wall)">
+    <rect x="40" y="40" width="820" height="12"/>
+    <rect x="40" y="508" width="820" height="12"/>
+    <rect x="40" y="52" width="12" height="456"/>
+    <rect x="848" y="52" width="12" height="58"/>
+    <rect x="848" y="170" width="12" height="338"/>
+    <rect x="426" y="52" width="12" height="178"/>
+    <rect x="700" y="52" width="12" height="178"/>
+    <rect x="640" y="322" width="12" height="186"/>
+    <rect x="744" y="322" width="12" height="186"/>
+    <rect x="52" y="230" width="128" height="12"/>
+    <rect x="228" y="230" width="312" height="12"/>
+    <rect x="588" y="230" width="152" height="12"/>
+    <rect x="800" y="230" width="48" height="12"/>
+    <rect x="52" y="310" width="228" height="12"/>
+    <rect x="340" y="310" width="380" height="12"/>
+    <rect x="768" y="310" width="80" height="12"/>
+  </g>
+
+  <!-- esquadrias: o vão aberto na parede mais a linha do caixilho -->
+  <g fill="var(--map-terrain)">
+    <rect x="110" y="40" width="130" height="12"/>
+    <rect x="280" y="40" width="120" height="12"/>
+    <rect x="480" y="40" width="180" height="12"/>
+    <rect x="40" y="80" width="12" height="120"/>
+    <rect x="40" y="360" width="12" height="110"/>
+    <rect x="120" y="508" width="160" height="12"/>
+    <rect x="330" y="508" width="170" height="12"/>
+  </g>
+  <g stroke="var(--map-wall)" stroke-width="2" fill="none">
+    <path d="M110 46h130M280 46h120M480 46h180M120 514h160M330 514h170"/>
+    <path d="M46 80v120M46 360v110"/>
+  </g>
+
+  <!-- portas: folha no traço forte, arco de giro no traço fraco -->
+  <g fill="none" stroke="var(--map-wall)" stroke-width="1.8" stroke-linecap="round">
+    <path d="M180 230v-48M540 230v-48M280 322v60M768 322v48M848 110h-30M848 170h-30"/>
+    <g opacity=".45">
+      <path d="M228 230A48 48 0 0 0 180 182"/>
+      <path d="M588 230A48 48 0 0 0 540 182"/>
+      <path d="M340 322A60 60 0 0 1 280 382"/>
+      <path d="M720 322A48 48 0 0 0 768 370"/>
+      <path d="M848 140A30 30 0 0 1 818 110"/>
+      <path d="M848 140A30 30 0 0 0 818 170"/>
+    </g>
+  </g>
+
+  <!-- Mobiliário em traço tracejado: um traço = uma bancada, um ponto = um assento. -->
+  <g fill="none" stroke="var(--map-detail)">
+    <path d="M84 86h310" stroke-width="26" stroke-dasharray="90 20"/>
+    <path d="M102 114h274" stroke-width="10" stroke-dasharray="0 34" stroke-linecap="round"/>
+    <path d="M102 182h274" stroke-width="10" stroke-dasharray="0 34" stroke-linecap="round"/>
+    <path d="M84 210h310" stroke-width="26" stroke-dasharray="90 20"/>
+
+    <path d="M470 86h198" stroke-width="26" stroke-dasharray="84 30"/>
+    <path d="M488 114h162" stroke-width="10" stroke-dasharray="0 34" stroke-linecap="round"/>
+    <path d="M488 182h162" stroke-width="10" stroke-dasharray="0 34" stroke-linecap="round"/>
+    <path d="M470 210h198" stroke-width="26" stroke-dasharray="84 30"/>
+
+    <path d="M84 366v128M116 366v128M148 366v128M180 366v128" stroke-width="12"/>
+    <path d="M296 376h272" stroke-width="11" stroke-dasharray="0 45" stroke-linecap="round"/>
+    <path d="M272 410h320" stroke-width="46" stroke-dasharray="140 40"/>
+    <path d="M296 444h272" stroke-width="11" stroke-dasharray="0 45" stroke-linecap="round"/>
+    <path d="M272 478h320" stroke-width="46" stroke-dasharray="140 40"/>
+  </g>
+
+  <!-- escada e sanitários -->
+  <rect x="730" y="72" width="100" height="130" fill="url(#atlas-degraus)"
+        stroke="var(--map-detail)" stroke-width="1.5"/>
+  <path d="M780 192V86m0 0-8 12m8-12 8 12" fill="none" stroke="var(--map-wall)"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="none" stroke="var(--map-detail)" stroke-width="1.5">
+    <rect x="664" y="338" width="30" height="34" rx="3"/>
+    <rect x="664" y="382" width="30" height="34" rx="3"/>
+    <rect x="664" y="426" width="30" height="34" rx="3"/>
+    <circle cx="722" cy="352" r="11"/>
+    <circle cx="722" cy="384" r="11"/>
+    <rect x="768" y="338" width="30" height="34" rx="3"/>
+    <rect x="768" y="382" width="30" height="34" rx="3"/>
+    <rect x="768" y="426" width="30" height="34" rx="3"/>
+    <circle cx="826" cy="352" r="11"/>
+    <circle cx="826" cy="384" r="11"/>
+  </g>
+
+  <g class="map-minor" pointer-events="none" transform="translate(52 538)">
+    <rect width="60" height="6" fill="var(--map-wall)"/>
+    <rect x="60" width="60" height="6" fill="none" stroke="var(--map-wall)" stroke-width="1"/>
+    <g font-size="12" fill="var(--text-muted)" text-anchor="middle">
+      <text x="0" y="-6">0</text>
+      <text x="60" y="-6">5</text>
+      <text x="120" y="-6">10 m</text>
+    </g>
+  </g>
+
+  <!-- Rótulos fora dos grupos clicáveis; o contorno de leitura vem do globals.css. -->
+  <g pointer-events="none" fill="var(--text)" font-weight="600" text-anchor="middle">
+    <text x="239" y="152" font-size="24">Laboratório 1</text>
+    <text x="569" y="152" font-size="22">Laboratório 2</text>
+    <text x="400" y="350" font-size="24">Biblioteca</text>
+  </g>
+  <g pointer-events="none" fill="var(--text-muted)" font-size="14" font-weight="600">
+    <text x="64" y="72">001</text>
+    <text x="450" y="72">002</text>
+    <text x="64" y="342">003</text>
+  </g>
+  <g class="map-minor" pointer-events="none" fill="var(--text-muted)"
+     font-size="13" font-weight="500" text-anchor="middle">
+    <text x="400" y="282">Circulação</text>
+    <text x="780" y="222">Escada</text>
+    <text x="750" y="486">Sanitários</text>
+    <text x="876" y="128">Entrada</text>
+  </g>
+  <path class="map-minor" d="M890 144h-28m0 0 7-6m-7 6 7 6" fill="none"
+        stroke="var(--text-muted)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

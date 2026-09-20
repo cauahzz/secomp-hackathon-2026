@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# Pesos baixados pela ultralytics
+*.pt
+
+# Saída do evaluate.py e anotações da equipe
+data/eval_frames/
+data/manual.csv
+.pytest_cache/
