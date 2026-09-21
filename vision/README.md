@@ -1,6 +1,6 @@
 # ATLAS — Vision Agent
 
-Implementação do módulo de visão descrito em `ATLAS_agente_Visao.md`. O agente
+Implementação do módulo de visão descrito em [`docs/spec-visao.md`](../docs/spec-visao.md). O agente
 só conversa com o resto do sistema por `POST /ingest` e pela leitura do
 `seed.json`.
 

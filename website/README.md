@@ -4,7 +4,7 @@ Interface web do MVP do ATLAS: mapa interativo do campus, ocupação dos
 ambientes, detalhe e visão geral. Next.js + React + TypeScript + SVG.
 
 O frontend conversa com o resto do sistema **somente** pelos `GET` do contrato
-compartilhado (spec `ATLAS_agente_Frontend.md`).
+compartilhado (spec [`docs/spec-frontend.md`](../docs/spec-frontend.md)).
 
 ## Rodar
 

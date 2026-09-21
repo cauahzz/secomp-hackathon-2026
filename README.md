@@ -3,7 +3,17 @@
 **A**mbiente **T**ecnológico para **L**ogística e **A**nálise **S**istêmica — uma
 camada operacional única para o campus universitário.
 
-Este repositório é o MVP, que responde a uma pergunta só:
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
+![YOLO](https://img.shields.io/badge/Ultralytics-YOLO11-0B0B0B)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
+Projeto desenvolvido durante o **hackathon da SECOMP — UNIFEI, campus de
+Itajubá, 2026**, com o tema *Visão Computacional aplicada à Logística
+Universitária*.
+
+O que está aqui é o MVP, que responde a uma pergunta só:
 
 > "Quantas pessoas estão em cada ambiente da universidade **agora**?"
 
@@ -11,7 +21,90 @@ A resposta vem de uma câmera comum: o vídeo vira detecção, a detecção vira
 contagem por ambiente, e a contagem vira um mapa que alguém olha antes de
 decidir para onde ir.
 
-![Visão geral do campus](home.jpeg)
+![Visão geral do campus](demo_pictures/home.jpeg)
+
+## Índice
+
+- [O problema](#o-problema)
+- [O que o ATLAS é — e o que ele não é](#o-que-o-atlas-é--e-o-que-ele-não-é)
+- [O contexto do hackathon](#o-contexto-do-hackathon)
+- [Como funciona](#como-funciona)
+- [Os três módulos](#os-três-módulos)
+- [Requisitos](#requisitos) · [Instalação](#instalação) · [Como iniciar](#como-iniciar)
+- [Configuração](#configuração) · [Testes](#testes)
+- [A demonstração](#a-demonstração)
+- [Precisão e limitações](#precisão-e-limitações)
+- [Privacidade e LGPD](#privacidade-e-lgpd)
+- [Documentação](#documentação) · [Estrutura do repositório](#estrutura-do-repositório)
+- [Visão futura](#visão-futura) · [Licença](#licença) · [Equipe](#equipe)
+
+## O problema
+
+Saber quantas pessoas há em uma sala é um **dado**, não uma dor. A dor é a
+decisão que alguém não consegue tomar por falta dele.
+
+**O aluno procurando lugar para estudar.** "Para qual sala ou laboratório eu vou
+agora?" Hoje ele anda pelos prédios abrindo portas. Com o ATLAS, abre o mapa e
+vê quais ambientes estão livres.
+
+**A gestão de infraestrutura.** "Onde desligar ar-condicionado e luzes?" "Esse
+laboratório reservado está sendo usado de verdade?" Hoje se descobre por
+reclamação, ou não se descobre. Com o ATLAS, o ambiente vazio aparece no mapa e
+o uso real fica registrado no histórico.
+
+Essas informações existem no campus, mas ficam dispersas — ou simplesmente não
+são coletadas. A dor que o ATLAS resolve é a **falta de uma visão operacional
+consolidada**.
+
+## O que o ATLAS é — e o que ele não é
+
+O ATLAS não é um contador de pessoas com YOLO. Contar pessoas é o primeiro dado
+que ele produz, não o produto.
+
+A proposta é uma camada operacional do campus: **mapear** onde estão as coisas,
+**entender** o que está acontecendo, **integrar** fontes diferentes e **operar**
+— transformar dado em decisão. Ocupação por câmera é uma fonte; agenda, chamada,
+filas, estacionamento e sensores são outras, que entram depois pela mesma porta.
+
+Por isso o centro do modelo de dados é o **espaço**, nunca a câmera:
+
+```
+SALA 102
+ ├── câmera        ← a única fonte implementada no MVP
+ ├── agenda
+ ├── chamada
+ ├── ocupação
+ ├── histórico
+ └── outras fontes
+```
+
+A câmera é apenas uma fonte de informação sobre o espaço. Trocar a câmera por um
+sensor de presença, ou somar os dois, não muda o resto do sistema.
+
+## O contexto do hackathon
+
+| | |
+|---|---|
+| **Evento** | Hackathon da SECOMP — UNIFEI, campus de Itajubá, 2026 |
+| **Tema** | Visão Computacional aplicada à Logística Universitária |
+| **Janela de implementação** | cerca de 3 h 30 |
+| **Equipe** | 5 pessoas — visão, backend, frontend e integração/pitch |
+| **Apresentação** | pitch de 5 minutos |
+
+O prazo curto definiu a estratégia: **pouco escopo, fluxo completo, demonstração
+forte**. A regra que a equipe aplicou a cada decisão foi "isso é necessário para
+demonstrar o MVP?" — e o que não era ficou de fora, declarado como visão futura
+em vez de ficar pela metade.
+
+A consequência prática disso foi o **esqueleto andante**: a cadeia inteira
+existiu desde a primeira meia hora, com dados falsos nas pontas. A visão já
+enviava contagens sintéticas pelo mesmo código de envio do modo real, a API já
+respondia no formato final do contrato e o frontend já lia um JSON mockado com o
+mesmo formato. Depois, cada pessoa trocou só a sua peça falsa pela real — e, se
+alguma peça atrasasse, ainda haveria uma demo de ponta a ponta.
+
+Os modos de teste que sobraram disso (`--fake` na visão, `NEXT_PUBLIC_USE_MOCK`
+no site) continuam no repositório e estão documentados abaixo.
 
 ## Como funciona
 
@@ -35,7 +128,7 @@ configuração compartilhado:
 (ROI) cada pessoa está pelo ponto dos pés, suaviza a contagem com uma mediana
 deslizante e envia um `POST /ingest` por câmera.
 
-![Detecção e contagem por ROI](yolo.png)
+![Detecção e contagem por ROI](demo_pictures/yolo.png)
 
 **A API** grava cada contagem como um snapshot e calcula o status **na leitura**,
 nunca na gravação. A razão é direta: um status gravado no ingest jamais viraria
@@ -57,11 +150,11 @@ O limite é o `operational_limit` do ambiente; na falta dele, a `capacity`. Em
 código que vem da API em rótulo e cor. Se a API cair, a última tela continua no
 lugar, um aviso aparece no topo e o polling segue tentando.
 
-**`api/seed.json`** é a fonte única da estrutura da demo: a API popula o banco a
-partir dele e a visão lê dele as câmeras e as ROIs. Não existe endpoint de
-configuração de ROI — mudar o campus é editar esse arquivo. Seed inválido
-derruba a API de propósito, porque subir com a estrutura pela metade esconderia
-o erro até a hora da demo.
+**`api/seed.json`** é a fonte única da estrutura: a API popula o banco a partir
+dele e a visão lê dele as câmeras e as ROIs. Não existe endpoint de configuração
+de ROI — mudar o campus é editar esse arquivo. Seed inválido derruba a API de
+propósito, porque subir com a estrutura pela metade esconderia o erro até a hora
+da demo.
 
 | Rota | O quê |
 |---|---|
@@ -77,9 +170,9 @@ o erro até a hora da demo.
 
 | Pasta | O quê | Stack | Porta | Detalhes |
 |---|---|---|---|---|
-| `api/` | backend e banco | Python · FastAPI · SQLAlchemy · SQLite | 8000 | [README](api/README.md) |
-| `vision/` | detecção e contagem | Python · OpenCV · Ultralytics YOLO | — | [README](vision/README.md) |
-| `website/` | interface web | Next.js · React · TypeScript | 3000 | [README](website/README.md) |
+| `api/` | backend e banco | Python · FastAPI · SQLAlchemy · SQLite | 8000 | [README](api/README.md) · [spec](docs/spec-api.md) |
+| `vision/` | detecção e contagem | Python · OpenCV · Ultralytics YOLO | — | [README](vision/README.md) · [spec](docs/spec-visao.md) |
+| `website/` | interface web | Next.js · React · TypeScript | 3000 | [README](website/README.md) · [spec](docs/spec-frontend.md) |
 
 Cada módulo roda sozinho: a API sobe sem a visão (os ambientes ficam em
 `no_data`), o site sobe sem a API (modo mock) e a visão sobe sem vídeo e sem
@@ -261,9 +354,86 @@ python -m pytest tests -q          # ou: make test
 ```
 
 Há ainda um smoke test ponta a ponta da visão contra uma API de mentira
-(`vision/tools/mock_api.py`) e um `vision/evaluate.py`, que mede o erro médio da
+(`vision/tools/mock_api.py`) e um `vision/evaluate.py`, que mede o erro da
 contagem contra frames anotados à mão. Os dois estão descritos no
 [README da visão](vision/README.md).
+
+## A demonstração
+
+As três telas, alimentadas pelo vídeo de demonstração em loop:
+
+| Rota | Tela |
+|---|---|
+| `/` | Visão Geral: pessoas no campus, ambientes por situação, mais cheios agora |
+| `/mapa` | Mapa: campus → prédio → andar → ambiente |
+| `/ambientes` | Tabela com todos os ambientes, com busca |
+
+<p align="center">
+  <img src="demo_pictures/map_main.jpeg" width="49%" alt="Mapa do campus">
+  <img src="demo_pictures/map_sala102_2.jpeg" width="49%" alt="Detalhe de um ambiente">
+</p>
+
+Cada prédio no mapa recebe a cor do seu ambiente mais crítico. Cor nunca é a
+única informação: todo indicador vem acompanhado de rótulo em texto.
+
+**Uma ressalva honesta sobre a demo:** o seed usa **uma câmera só**, dividida em
+duas ROIs que representam duas salas diferentes. É uma simulação de várias
+fontes, não duas câmeras de verdade — a equipe declarou isso no pitch em vez de
+deixar o jurado descobrir. O caminho dos dados, esse é o real: vídeo → YOLO →
+ROI → ocupação → banco → API → frontend, sem atalho em nenhum ponto.
+
+O vídeo roda em loop justamente porque, quando ele termina, os envios param e,
+30 segundos depois, todos os ambientes viram "sem dados" no meio da
+apresentação.
+
+## Precisão e limitações
+
+O MVP usa um modelo pré-treinado, sem ajuste para o campus. Ele erra, e as
+limitações são parte da entrega, não um detalhe escondido:
+
+- **oclusão** — pessoas atrás de outras, de cadeiras e de mesas; é o erro mais
+  comum em sala com gente sentada;
+- **iluminação** e contraste da cena;
+- **ângulo e posição da câmera** — ângulo alto e corpo inteiro visível contam
+  muito melhor do que câmera de frente;
+- **câmera sem calibração**;
+- **modelo pré-treinado**, não ajustado para o campus;
+- **avaliação em um único vídeo**, que não representa o campus inteiro.
+
+Para medir em vez de estimar, o repositório traz o `vision/evaluate.py`: ele
+extrai ~20 frames espaçados do vídeo, a equipe anota manualmente a contagem de
+cada ROI em um CSV, e o script roda o mesmo modelo com o mesmo limiar e imprime
+o **erro médio absoluto (MAE) por ROI e geral**, sem suavização. O passo a passo
+está no [README da visão](vision/README.md).
+
+## Privacidade e LGPD
+
+Imagem de pessoas é dado pessoal pela LGPD, mesmo sem identificação. O ATLAS foi
+desenhado em volta disso:
+
+- detecta **pessoas, não identidades** — só a classe `person` do YOLO, sem
+  reconhecimento facial e sem tracking entre quadros;
+- processa o vídeo **em memória** e descarta o frame após a contagem;
+- **nenhum frame é gravado ou transmitido** — o que sai da câmera é um número
+  inteiro por região;
+- o banco guarda contagens e horários, **nunca imagens**.
+
+Reconhecimento facial e chamada por identificação não estão na visão do produto.
+Se um dia forem considerados, terão que ser um módulo separado, com requisitos
+próprios de segurança, governança e autorização.
+
+## Documentação
+
+| Documento | O quê |
+|---|---|
+| [`docs/spec-api.md`](docs/spec-api.md) | contrato HTTP, modelo de dados, regras de status |
+| [`docs/spec-visao.md`](docs/spec-visao.md) | detecção, ROIs, suavização, resiliência, avaliação |
+| [`docs/spec-frontend.md`](docs/spec-frontend.md) | telas, estados, identidade visual e paleta |
+| [`docs/pitch.pdf`](docs/pitch.pdf) | os slides apresentados no pitch de 5 minutos |
+
+As três specs foram escritas **antes** do código, na primeira meia hora do
+hackathon. É delas que sai o contrato que permitiu os três módulos avançarem em
+paralelo, sem um esperar pelo outro.
 
 ## Estrutura do repositório
 
@@ -281,24 +451,10 @@ website/             interface Next.js
   app/               as três telas
   lib/api.ts         único ponto de contato com o backend
   lib/mock/          modo mock, no formato exato do contrato
+docs/                as specs dos três módulos
+demo_pictures/       capturas de tela usadas neste README
 atlas.bat            sobe os três módulos de uma vez (Windows)
 ```
-
-## As telas
-
-| Rota | Tela |
-|---|---|
-| `/` | Visão Geral: pessoas no campus, ambientes por situação, mais cheios agora |
-| `/mapa` | Mapa: campus → prédio → andar → ambiente |
-| `/ambientes` | Tabela com todos os ambientes, com busca |
-
-<p align="center">
-  <img src="map_main.jpeg" width="49%" alt="Mapa do campus">
-  <img src="map_sala102_2.jpeg" width="49%" alt="Detalhe de um ambiente">
-</p>
-
-Cada prédio no mapa recebe a cor do seu ambiente mais crítico. Cor nunca é a
-única informação: todo indicador vem acompanhado de rótulo em texto.
 
 ## Convenções
 
@@ -309,17 +465,57 @@ Cada prédio no mapa recebe a cor do seu ambiente mais crítico. Cor nunca é a
 - O status vem pronto da API; nenhum outro módulo recalcula faixa ou status.
 - No site, cor só sai de token CSS — nenhum hex fora de `app/globals.css`.
 
-## LGPD
+## Visão futura
 
-A visão detecta **pessoas**, não identidades: só a classe `person` do YOLO, sem
-reconhecimento facial e sem tracking entre quadros. Nenhum frame é gravado ou
-transmitido; o que sai da câmera é uma contagem inteira por região. O banco
-guarda números e horários, nunca imagens.
+O MVP entrega ocupação. A mesma arquitetura, com o espaço no centro, comporta as
+próximas fontes sem reescrita:
 
-## Fora do escopo do MVP
+chamada e frequência (como integração com o sistema acadêmico, não por
+identificação em câmera) · filas e tempo de espera do RU · alerta de
+superlotação · estacionamento · objetos perdidos · integração com a agenda de
+salas · eventos · sensores · APIs externas.
+
+O destino é uma plataforma única para entender e operar o campus.
+
+### Fora do escopo do MVP
 
 Autenticação, permissões, WebSocket, eventos, reconhecimento facial, filas,
 microserviços, cloud, endpoint de configuração de ROI e streaming de vídeo.
 
-O MVP não existe para ser a plataforma completa — existe para provar que a
-arquitetura funciona de ponta a ponta.
+O MVP não existe para ser a plataforma completa — existe para provar, de ponta a
+ponta, que a arquitetura funciona.
+
+## Licença
+
+Este projeto está sob a licença [MIT](LICENSE): use, modifique e redistribua à
+vontade, mantendo o aviso de copyright.
+
+### Licenças de terceiros
+
+Nenhuma dependência está incluída neste repositório — todas são instaladas pelo
+`pip` ou pelo `npm` e mantêm a própria licença. Uma delas pede atenção:
+
+| Dependência | Licença |
+|---|---|
+| **`ultralytics` (YOLO)** | **AGPL-3.0** |
+| FastAPI, SQLAlchemy, Next.js, React | MIT |
+| OpenCV, requests | Apache-2.0 |
+| uvicorn, numpy | BSD-3-Clause |
+
+A AGPL-3.0 do `ultralytics` alcança quem distribui uma obra derivada **e também
+quem oferece o sistema como serviço pela rede** — nos dois casos, com a
+obrigação de publicar o código-fonte correspondente. Para uso fechado, a
+Ultralytics vende licença comercial.
+
+A outra saída é trocar o detector: todo o contato com o YOLO está em uma classe
+só, `PersonDetector`, em `vision/atlas_vision/detector.py`. O restante do módulo
+de visão enxerga apenas uma lista de `Detection`, então substituir o modelo por
+um de licença permissiva é mexer em um arquivo.
+
+## Equipe
+
+Desenvolvido por uma equipe de cinco pessoas durante o hackathon da SECOMP na
+UNIFEI (Itajubá, 2026), com as frentes divididas entre visão computacional,
+backend, frontend e integração.
+
+Este repositório é mantido por [@cauahzz](https://github.com/cauahzz).

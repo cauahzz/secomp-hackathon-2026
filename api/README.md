@@ -3,7 +3,7 @@
 Backend do ATLAS: recebe a ocupação calculada pelo módulo de visão, persiste os
 dados e entrega ao frontend tudo o que ele precisa.
 
-Spec completa: [`ATLAS_agente_API.md`](ATLAS_agente_API.md).
+Spec completa: [`docs/spec-api.md`](../docs/spec-api.md).
 
 ## Stack
 
