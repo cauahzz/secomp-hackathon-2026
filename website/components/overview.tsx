@@ -15,13 +15,14 @@ export function Overview() {
     return (
       <div className="space-y-7 sm:space-y-8" aria-busy="true">
         <div className="grid gap-3 sm:gap-4 lg:grid-cols-3">
-          <div className="h-40 animate-pulse rounded-xl bg-surface-2 lg:col-span-2" />
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-1">
-            <div className="h-24 animate-pulse rounded-xl bg-surface-2 lg:h-auto" />
-            <div className="h-24 animate-pulse rounded-xl bg-surface-2 lg:h-auto" />
-          </div>
+          <div className="h-64 animate-pulse rounded-xl bg-surface-2 lg:col-span-2" />
+          <div className="h-64 animate-pulse rounded-xl bg-surface-2" />
         </div>
-        <div className="h-44 animate-pulse rounded-xl bg-surface-2" />
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={index} className="h-36 animate-pulse rounded-xl bg-surface-2" />
+          ))}
+        </div>
       </div>
     )
   }
@@ -52,9 +53,11 @@ export function Overview() {
     <div className="space-y-7 sm:space-y-8">
       {overLimit.length > 0 && <OverLimitAlert spaces={overLimit} onSelect={selectSpace} />}
 
+      {/* As duas leituras do campus lado a lado: quanta gente tem e como os
+          ambientes estão distribuídos. É o que o subtítulo da página promete. */}
       <section className="grid gap-3 sm:gap-4 lg:grid-cols-3">
         <article
-          className="rounded-xl border border-border bg-surface p-4 sm:p-6 lg:col-span-2"
+          className="rounded-xl border border-border bg-surface p-4 sm:p-5 lg:col-span-2"
           style={{ borderLeft: '3px solid var(--brand)' }}
         >
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -64,7 +67,7 @@ export function Overview() {
             </p>
           </div>
 
-          <p className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 sm:mt-3">
+          <p className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
             <span
               className="tabular text-5xl leading-none font-bold sm:text-6xl"
               style={{ color: 'var(--brand)' }}
@@ -75,7 +78,7 @@ export function Overview() {
           </p>
 
           {campusRate !== null && (
-            <div className="mt-4 sm:mt-5">
+            <div className="mt-4">
               <div
                 className="h-2 w-full overflow-hidden rounded-full bg-bg"
                 role="img"
@@ -89,41 +92,40 @@ export function Overview() {
                   }}
                 />
               </div>
-              <p className="tabular mt-2 text-xs text-pretty text-muted">
-                {formatRate(campusRate)} da capacidade · {summary.spaces_total} ambientes
-                {summary.no_data > 0 ? ` · ${summary.no_data} sem leitura` : ''}
+              <p className="tabular mt-2 text-xs text-muted">
+                {formatRate(campusRate)} da capacidade
               </p>
             </div>
           )}
+
+          <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-border pt-4">
+            <Fact label="Ambientes" value={String(summary.spaces_total)} dot="var(--brand-soft)" />
+            <Fact
+              label="Câmeras"
+              value={`${summary.cameras_online}/${summary.cameras_total}`}
+              dot={allCamerasOnline ? 'var(--status-normal)' : 'var(--status-high)'}
+              hint={
+                allCamerasOnline
+                  ? undefined
+                  : `${summary.cameras_total - summary.cameras_online} sem sinal`
+              }
+            />
+            <Fact
+              label="Sem leitura"
+              value={String(summary.no_data)}
+              dot="var(--status-nodata)"
+            />
+          </dl>
         </article>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-1">
-          <StatCard
-            label="Câmeras online"
-            value={`${summary.cameras_online}/${summary.cameras_total}`}
-            accent={allCamerasOnline ? 'var(--status-normal)' : 'var(--status-high)'}
-            hint={
-              allCamerasOnline
-                ? 'Todas reportando'
-                : `${summary.cameras_total - summary.cameras_online} sem sinal`
-            }
-          />
-          <StatCard
-            label="Ambientes"
-            value={String(summary.spaces_total)}
-            accent="var(--brand-soft)"
-            hint="No campus"
-          />
-        </div>
+        <StatusDistribution summary={summary} />
       </section>
 
-      <StatusDistribution summary={summary} />
-
-      {busiest.length > 0 && (
-        <section>
-          <h2 className="mb-3 text-sm font-semibold tracking-wide text-muted uppercase">
-            Mais cheios agora
-          </h2>
+      <section>
+        <h2 className="mb-3 text-sm font-semibold tracking-wide text-muted uppercase">
+          Mais cheios agora
+        </h2>
+        {busiest.length > 0 ? (
           <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {busiest.map((space: Space) => (
               <li key={space.id}>
@@ -131,8 +133,13 @@ export function Overview() {
               </li>
             ))}
           </ul>
-        </section>
-      )}
+        ) : (
+          /* Campus todo vazio também é notícia; seção sumindo não conta nada. */
+          <p className="rounded-xl border border-border bg-surface p-6 text-center text-sm text-muted">
+            Nenhum ambiente com gente agora.
+          </p>
+        )}
+      </section>
     </div>
   )
 }
@@ -185,9 +192,8 @@ function OverLimitAlert({
 }
 
 /**
- * Uma barra proporcional no lugar de cinco cartões: a leitura "quase tudo
- * normal" ou "metade em alta" sai de um relance, e os números continuam
- * escritos na legenda.
+ * Uma barra proporcional mais uma legenda em linhas: a leitura "quase tudo
+ * normal" sai de um relance e cada contagem continua escrita ao lado do rótulo.
  */
 function StatusDistribution({ summary }: { summary: Summary }) {
   // No contrato cada contagem de /summary tem o nome do próprio status, então
@@ -198,84 +204,74 @@ function StatusDistribution({ summary }: { summary: Summary }) {
     .join(', ')
 
   return (
-    <section>
-      <h2 className="mb-3 text-sm font-semibold tracking-wide text-muted uppercase">
-        Ambientes por situação
-      </h2>
-      <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
-        {segments.length > 0 && (
-          <div
-            className="flex h-3 w-full gap-1"
-            role="img"
-            aria-label={`${summary.spaces_total} ambientes: ${description}`}
-          >
-            {segments.map((status) => (
-              <span
-                key={status}
-                className="h-full rounded-full"
-                style={{
-                  flex: `${summary[status]} 1 0%`,
-                  minWidth: '0.75rem',
-                  backgroundColor: statusColor(status),
-                }}
-              />
-            ))}
-          </div>
-        )}
+    <article className="flex flex-col rounded-xl border border-border bg-surface p-4 sm:p-5">
+      <h2 className="text-sm text-muted">Ambientes por situação</h2>
 
-        <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3 lg:grid-cols-5">
-          {STATUS_ORDER.map((status) => (
-            <div
+      {segments.length > 0 && (
+        <div
+          className="mt-3 flex h-3 w-full gap-1"
+          role="img"
+          aria-label={`${summary.spaces_total} ambientes: ${description}`}
+        >
+          {segments.map((status) => (
+            <span
               key={status}
-              className={summary[status] === 0 ? 'opacity-45' : undefined}
-            >
-              <dt className="flex items-start gap-2 text-xs text-pretty text-muted">
-                <span
-                  aria-hidden
-                  className="mt-1 size-2.5 shrink-0 rounded-full"
-                  style={{ backgroundColor: statusColor(status) }}
-                />
-                <span className="min-w-0">{statusLabel(status)}</span>
-              </dt>
-              <dd className="tabular mt-1 ml-[1.125rem] text-2xl font-bold text-text">
-                {summary[status]}
-              </dd>
-            </div>
+              className="h-full rounded-full"
+              style={{
+                flex: `${summary[status]} 1 0%`,
+                minWidth: '0.75rem',
+                backgroundColor: statusColor(status),
+              }}
+            />
           ))}
-        </dl>
-      </div>
-    </section>
+        </div>
+      )}
+
+      <ul className="mt-4 flex flex-1 flex-col justify-between gap-1">
+        {STATUS_ORDER.map((status) => (
+          <li
+            key={status}
+            className={`flex items-center gap-2.5 text-sm ${
+              summary[status] === 0 ? 'opacity-45' : ''
+            }`}
+          >
+            <span
+              aria-hidden
+              className="size-2.5 shrink-0 rounded-full"
+              style={{ backgroundColor: statusColor(status) }}
+            />
+            <span className="min-w-0 flex-1 truncate text-muted">{statusLabel(status)}</span>
+            <span className="tabular shrink-0 font-semibold text-text">{summary[status]}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
   )
 }
 
-function StatCard({
+function Fact({
   label,
   value,
-  accent,
+  dot,
   hint,
 }: {
   label: string
   value: string
-  accent: string
+  dot: string
   hint?: string
 }) {
   return (
-    <article
-      className="flex h-full flex-col rounded-xl border border-border bg-surface p-4 sm:p-5"
-      style={{ borderLeft: `3px solid ${accent}` }}
-    >
-      {/* O rótulo quebra em vez de cortar: em 320 px "Câmeras online" não cabe
-          numa linha, e meia palavra informa menos que duas linhas. */}
-      <h3 className="flex items-start gap-2 text-sm text-pretty text-muted">
+    <div className="min-w-0">
+      <dt className="flex items-center gap-1.5 text-xs text-muted">
         <span
           aria-hidden
-          className="mt-1.5 size-2.5 shrink-0 rounded-full"
-          style={{ backgroundColor: accent }}
+          className="size-2 shrink-0 rounded-full"
+          style={{ backgroundColor: dot }}
         />
-        <span className="min-w-0">{label}</span>
-      </h3>
-      <p className="tabular mt-1.5 text-2xl font-bold text-text sm:mt-2 sm:text-3xl">{value}</p>
-      {hint && <p className="mt-1 text-xs text-pretty text-muted">{hint}</p>}
-    </article>
+        <span className="min-w-0 truncate">{label}</span>
+      </dt>
+      <dd className="tabular mt-1 text-xl font-semibold text-text">{value}</dd>
+      {hint && <p className="mt-0.5 truncate text-xs text-muted">{hint}</p>}
+    </div>
   )
 }

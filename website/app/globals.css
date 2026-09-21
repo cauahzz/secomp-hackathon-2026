@@ -113,13 +113,19 @@ summary,
   transition: width var(--dur-panel) var(--ease-out);
 }
 
-/* Retorno de toque: o alvo encolhe de leve enquanto o dedo está nele. */
+/* Retorno de toque: o alvo encolhe de leve enquanto o dedo está nele.
+   As cores de hover entram na mesma declaração porque uma segunda regra
+   `transition` (a do `transition-colors` do Tailwind) apagaria esta. */
 .press {
-  transition: transform var(--dur-press) var(--ease-out);
+  transition:
+    scale var(--dur-press) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
 }
 
 .press:active {
-  transform: scale(0.985);
+  scale: 0.985;
 }
 
 /* Pula direto para o conteúdo; só aparece ao receber foco pelo teclado. */
@@ -181,7 +187,7 @@ summary,
   }
 
   .press:active {
-    transform: none;
+    scale: 1;
   }
 
   .bar-fill {
@@ -203,7 +209,7 @@ summary,
   display: block;
   width: 100%;
   height: auto;
-  max-height: clamp(16rem, 56vh, 40rem);
+  max-height: clamp(16rem, 68vh, 46rem);
   margin-inline: auto;
 }
 

@@ -24,7 +24,10 @@ export function OccupancyChart({ points, limit, color }: OccupancyChartProps) {
 
   const counts = points.map((point) => point.person_count)
   const peak = Math.max(...counts)
-  const scaleMax = Math.max(peak * 1.15, limit * 1.05, 1)
+  // A série manda na escala, com folga para o limite quando ele está ao
+  // alcance: sem o teto, um limite de 35 achataria uma série de 7 no chão;
+  // sem a folga, uma série plana encostaria no topo e pareceria lotação.
+  const scaleMax = Math.max(peak * 1.25, Math.min(limit * 1.05, peak * 2.2), 1)
 
   const toX = (index: number) => (index / (points.length - 1)) * VIEW_WIDTH
   const toY = (count: number) => VIEW_HEIGHT - (count / scaleMax) * VIEW_HEIGHT
@@ -54,7 +57,7 @@ export function OccupancyChart({ points, limit, color }: OccupancyChartProps) {
         <defs>
           {/* O degradê dá volume à série sem competir com a linha. */}
           <linearGradient id={GRADIENT_ID} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity={0.32} />
+            <stop offset="0%" stopColor={color} stopOpacity={0.22} />
             <stop offset="100%" stopColor={color} stopOpacity={0.02} />
           </linearGradient>
         </defs>
